@@ -1,76 +1,83 @@
-import React from "react";
+import React, { createContext, useState } from "react";
 import ReactDOM from "react-dom/client";
+import clsx from 'clsx'
+
 import "./index.css";
 
 function ToDoItem(props) {
+  
   return (
-    <div className="to-do-item" style={{ color: props.color }} >
-      <input type="checkbox" value={props.to_do_text} onClick={() => props.onClick()} />
+    <div className='todo' style={{ color: props.color }} >
+      <input type="checkbox" value={props.to_do_text} onClick={props.onClick} />
       This is a to-do-item: {props.to_do_text}
-
-      <button type="button" onClick={() => props.delete()}>-</button>
+      <button type="button" onClick={props.delete}>-</button>
     </div>
   );
 }
 
-class Container extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      to_do_items: [
-        this.render_to_do_item(0, "Test1"),
-        this.render_to_do_item(1, "Test2"),
-        this.render_to_do_item(2, "Test3")
-      ],
-    };
+const State = createContext({})
+
+function GlobalStateProvider({children}) {
+
+  const [state, setState] = useState({
+    todoItems: []
+  })
+
+  const addTodo = (todo) => setState(prev => ({
+    ...prev,
+    todoItems: prev.todoItems.concat(todo)
+  }))
+
+  const ctxValue = {
+    state,
+    addTodo
   }
 
-  handleClick(i, text) {
-    console.log(i);
-    var to_do_items = this.state.to_do_items.slice();
-    to_do_items[i] = this.render_to_do_item(i, text, "green")
-    this.setState({ to_do_items: to_do_items })
-  }
 
-  deleteToDoItem(i) {
-    console.log(i);
-    var to_do_items = this.state.to_do_items.slice();
-    to_do_items[i] = null
-    this.setState({ to_do_items: to_do_items })
-  }
 
-  render_to_do_item(i, text, color = "blue") {
-    return <ToDoItem to_do_text={text} onClick={() => this.handleClick(i, text)} color={color} delete={() => this.deleteToDoItem(i)} />;
-  }
-
-  add_new_to_do(text, color = "blue") {
-    var to_do_items = this.state.to_do_items.slice();
-    var new_index = to_do_items.length;
-    to_do_items.push(this.render_to_do_item(new_index, text, color));
-    this.setState({ to_do_items: to_do_items })
-  }
-
-  render() {
-    return (
-      <ul>
-        {this.state.to_do_items.map((to_do_item, index) => (
-          <li key={index}>{to_do_item}</li>
-        ))}
-
-        <li key={-1}>
-          <label for="NewToDo">ToDo:</label>
-          < input type="text" id="NewToDo" name="NewToDo" placeholder="Wash the dishes." ></input >
-          <button type="button" onClick={() => this.add_new_to_do(document.getElementById('NewToDo').value
-          )}>Add</button>
-        </li >
-      </ul >
-    );
-  }
+  return <State.Provider value={ctxValue}>{children}</State.Provider>
 }
 
-class ToDoApp extends React.Component {
-  render() {
-    return (
+function Container() {
+
+  const [todoItems, setTodos] = useState([])
+  const [todoInput, setTodoInput] = useState('')
+  
+  function handleClick(i) {
+    setTodos(todos => {
+      todos[i].done = !todos[i].done
+      return Array.from(todos)
+    })
+  }
+
+  function deleteToDoItem(i) {
+    setTodos(todos => todos.filter((x,idx) =>  idx !== i))
+  }
+
+  function add_new_to_do(text) {
+    const todo = { text, done: false }
+    setTodos(todos => todos.concat(todo))
+    setTodoInput('')
+  }
+
+  return <ul>
+        {todoItems.map(({ text, done }, index) => (
+          <li key={index}>
+            <ToDoItem to_do_text={text} onClick={() => handleClick(index)} color={done ? 'green' : 'blue'} delete={() => deleteToDoItem(index)} />
+          </li>
+        ))}
+
+        <li className="grid grid-columns-3 ">
+          <label for="#NewToDo" >ToDo:</label>
+          <input type="text" id="NewToDo" name="NewToDo" placeholder="Wash the dishes." value={todoInput} onChange={e => setTodoInput(e.currentTarget.value)} />
+          <button type="button" onClick={() => add_new_to_do(todoInput)}>Add</button>
+        </li>
+      </ul >
+}
+ 
+function ToDoApp() {
+  return (
+    <GlobalStateProvider>
       <div className="to-do-app">
         <div className="header">
           To Do App
@@ -79,8 +86,8 @@ class ToDoApp extends React.Component {
           <Container />
         </div>
       </div>
+      </GlobalStateProvider>
     );
-  }
 }
 
 // ========================================
