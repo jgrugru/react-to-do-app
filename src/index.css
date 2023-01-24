@@ -3,48 +3,48 @@ body {
   margin: 20px;
 }
 
-ol, ul {
-  padding-left: 30px;
-}
-
-.board-row:after {
-  clear: both;
-  content: "";
-  display: table;
-}
-
-.status {
-  margin-bottom: 10px;
-}
-
-.square {
-  background: #fff;
-  border: 1px solid #999;
-  float: left;
+.header {
   font-size: 24px;
-  font-weight: bold;
-  line-height: 34px;
-  height: 34px;
-  margin-right: -1px;
-  margin-top: -1px;
-  padding: 0;
+}
+
+.to-do-app {
+  text-align: left;
+}
+
+.to-dos {
+  padding-left: 35%;
+}
+
+.to-do {
+  padding-left: 10px;
+  font: 19px "Gill Sans", Futura, sans-serif;
+  margin: 4px;  
+}
+
+.add-to-do {
+  background-color: #4CAF50;
+  border: none;
+  color: rgb(146, 189, 253);
+  padding: 10px;
   text-align: center;
-  width: 34px;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 12px;
+  margin: 4px 2px;
+  cursor: pointer;
+  border-radius: 8px;
 }
 
-.square:focus {
-  outline: none;
-}
-
-.kbd-navigation .square:focus {
-  background: #ddd;
-}
-
-.game {
-  display: flex;
-  flex-direction: row;
-}
-
-.game-info {
-  margin-left: 20px;
+.delete-to-do { 
+  background-color: #d74242;
+  border: none;
+  color: rgb(146, 189, 253);
+  padding: 10px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 12px;
+  margin: 4px 2px;
+  cursor: pointer;
+  border-radius: 8px;
 }

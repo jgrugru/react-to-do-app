@@ -4,10 +4,10 @@ import "./index.css";
 
 function ToDoItem(props) {
   return (
-    <div style={{ color: props.color }}>
+    <div class="to-do" style={{ color: props.color }}>
       <input type="checkbox" onClick={props.onClick} />
       {props.toDoText}
-      <button type="button" onClick={props.delete}>-</button>
+      <button class="delete-to-do" type="button" onClick={props.delete}>-</button>
     </div>
   );
 }
@@ -35,19 +35,20 @@ function Container() {
     })
   }
 
-  return <ul>
-    {toDoItems.map(({ text, done }, index) => (
-      <li key={index}>
+  return (
+    <div class="to-dos-box">
+      {toDoItems.map(({ text, done }, index) => (
         <ToDoItem toDoText={text} color={done ? 'green' : 'blue'} onClick={() => handleClick(index)} delete={() => deleteToDo(index)} />
-      </li>
-    ))}
+      ))}
 
-    <li className="grid grid-columns-3 ">
-      <label for="#NewToDo" >ToDo:</label>
-      <input type="text" id="NewToDo" name="NewToDo" placeholder="Wash the dishes." value={toDoInput} onChange={e => setToDoInput(e.currentTarget.value)} />
-      <button type="button" onClick={() => addNewToDo(toDoInput)}>Add</button>
-    </li>
-  </ul >
+      <div class="new-to-do">
+        <label for="#NewToDo" >ToDo:</label>
+        <input type="text" id="NewToDo" name="NewToDo" placeholder="Wash the dishes." value={toDoInput} onChange={e => setToDoInput(e.currentTarget.value)} />
+        <button class="add-to-do" type="button" onClick={() => addNewToDo(toDoInput)}>Add</button>
+      </div>
+    </div >
+
+  );
 }
 
 
