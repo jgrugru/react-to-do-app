@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import ReactDOM from "react-dom/client";
 import "./index.css";
 
@@ -16,6 +16,7 @@ function Container() {
 
   const [toDoItems, setToDoItems] = useState([]);
   const [toDoInput, setToDoInput] = useState("");
+  useEffect(() => console.log("Added a new item."), [toDoItems])
 
 
   function addNewToDo(text) {
